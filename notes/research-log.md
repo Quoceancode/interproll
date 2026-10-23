@@ -35,3 +35,21 @@ Ran:
 - `pip freeze` -> requirements.txt (73 pins + PyTorch cu128 extra index).
 Result: environment works on GPU; dependencies pinned. See decisions.md for certifi/dateutil choices.
 Next: novelty re-check, then e01.
+
+## 2026-10-23 — e00 forecast-collapse check: pre-registration (written before any forecast)
+Plan: experiments/e00_collapse/ (README + config.json once written). Arms: A = FinText/Chronos_Small_2023_US on
+excess returns; B = amazon/chronos-t5-small on excess returns; C = amazon/chronos-t5-small on a total-return
+index (same information as B, levels representation). S&P 500 as of 2023-12-31, next-day targets from 2024-01-02,
+context 512 (robustness 252), 20 samples, seeds {0,1} at 512.
+Hypothesis:
+- H1: arm A is not collapsed; arm B is collapsed or weaker than A.
+- H2: arm C is less collapsed than arm B (higher D and higher mean IC).
+Collapse (per arm x {sample mean, sample median} x L): (D < 0.05 AND mean daily rank-IC 95% block-bootstrap CI
+includes 0) OR Ties > 0.5. D = median over days of cross-sectional std(forecast)/std(realised). Arm collapsed =
+point collapse under both mean and median at L=512 (seeds must agree, else ambiguous). Spread collapse:
+S < 0.1 OR spread-vs-|r| CI includes 0. Arm C collapsing only via Ties -> "inconclusive (tokenizer resolution)".
+Would be falsified by: H1 — arm A collapsed. H2 — C's D and IC not above B's.
+Stop: A and B both collapsed at L=512 -> stop, report, no e01. Every other outcome (incl. neither collapsing)
+-> report and wait for Chase. Every verdict reported with its mean IC + CI (daily ICs ~0.01–0.03 are typically
+meaningful).
+Ran: nothing yet.
