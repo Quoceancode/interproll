@@ -16,4 +16,6 @@ _Overwrite this file at the end of each session. Keep it under one screen._
 - None.
 
 ## Next steps
-1. e01: load a generic Chronos and a FinText Chronos with nnsight; cache encoder activations on ~50 tickers of daily returns.
+1. e00: measure forecast variance / collapse for the generic Chronos and FinText Chronos-Small on the same
+   post-training-cutoff returns. **If both collapse, stop and report** before any interpretability work.
+2. e01: load a generic Chronos and a FinText Chronos with nnsight; cache encoder activations on ~50 tickers of daily returns.
