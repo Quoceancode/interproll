@@ -18,4 +18,7 @@ _Overwrite this file at the end of each session. Keep it under one screen._
 ## Next steps
 1. e00: measure forecast variance / collapse for the generic Chronos and FinText Chronos-Small on the same
    post-training-cutoff returns. **If both collapse, stop and report** before any interpretability work.
+   Spec (decisions.md): FinText Chronos_Small_2023_US vs amazon/chronos-t5-small; S&P 500 as of 2023-12-31;
+   returns from 2024-01-01; decimals clipped to [-1, 1] via `src/returns.py`; context 512 (robust: 252);
+   metrics = sample mean, median, spread. Open: pick the dated constituents source.
 2. e01: load a generic Chronos and a FinText Chronos with nnsight; cache encoder activations on ~50 tickers of daily returns.

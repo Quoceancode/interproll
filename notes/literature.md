@@ -95,6 +95,22 @@ Chronos_Small_2011_Global, Chronos_Small_2011_Augmented; paper arxiv.org/html/25
   TimesFM_8M/20M have no generic Google checkpoint of the same size (Google released 200M/500M) -> random-init
   baseline only for those.
 
+## What "generic" means: amazon/chronos-t5-* training corpus (checked 2026-10-23)
+Source: Ansari et al. 2024, arXiv 2403.07815 (HTML), Table 1 + Appendix B; model card amazon/chronos-t5-small
+(apache-2.0; card says only "publicly available time series data" + Gaussian-process synthetic data).
+- 28 training datasets (~890K series, ~84B obs, 5-min to yearly) + 10M TSMixup mixtures of them + 1M KernelSynth
+  synthetic series, sampled 9:1 (augmentations : synthetic).
+- **Finance in training = M4 Daily / Weekly / Monthly / Hourly only** (Benchmark I). Appendix B: "Domains include
+  micro-/macroeconomics, demographic, industry, and finance". No stock, crypto, or FX dataset in training.
+- Finance-category counts per M4 paper (Makridakis et al.) — **recalled, not re-verified**: Daily 1,559 / 4,227;
+  Weekly 164 / 359; Monthly 10,987 / 48,000; Hourly 0 / 414.
+- M4 series are positive **levels** (anonymised; values, not returns). Exact content of the finance series unknown.
+- Zero-shot only (NOT trained on): Exchange Rate (daily FX levels), FRED-MD (differenced + log), NN5, CIF 2016,
+  M1, M3, M4 Quarterly/Yearly, Tourism.
+-> Generic Chronos has seen some daily financial **levels**, mixed via TSMixup and mean-scaled, but no daily
+  return series. FinText sees only daily excess returns. So "generic vs finance" is also "levels vs returns" —
+  keep that confound in mind when interpreting differences.
+
 ## Overlap check against our claim (2026-10-23)
 - **Toward Structured Financial Foundation Models** — Raman, Mishra, Potluru, Ganesh (arXiv 2610.26516, Oct 2026): position paper proposing modular, domain-specialised financial foundation models; no experiments or internal analysis. **No overlap** (watch authors for follow-ups).
 - **Foundations without Fundamentals: Zero-Shot Blind Spots in Time Series FMs** — Ghoroghchian et al. (ICML 2026): SimpleTimeBench "unit tests" show Chronos-2, Moirai, Toto fail simple trends/periodicity/leading-indicator covariates zero-shot, and fine-tuning fixes one pattern while degrading others; behavioural only, no finance data. **No overlap**; relevant caution that fine-tuned/finance-trained models may trade off generic skills (check in e01).

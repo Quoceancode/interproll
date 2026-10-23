@@ -17,6 +17,16 @@ builds on time2time (2509.05801).
 6. Readable-vs-used gap per finance factor, compared across the two models: for each factor, probe
    accessibility vs forecast response to an intervention (cf. Dynamical Parameters, 2609.34316).
 
+## Controls to add
+- Generic-skill cost: run both models on synthetic generic series (trend, seasonality, cf. SimpleTimeBench in
+  "Foundations without Fundamentals", ICML 2026). Did finance pretraining cost generic skills? Also separates
+  "learned finance structure" from "lost the ability to extrapolate".
+
+## Phase 2
+- Feature trajectories across FinText's yearly checkpoints (2000–2023): track matched features as crises enter
+  the training data, e.g. Chronos_Small_2007_US vs 2008/2009_US. Do crash/vol-regime features appear only after
+  2008 is in the corpus? Needs a feature-matching method across separately trained SAEs.
+
 ## From Quocean experience (check the input constraint first)
 - Univariate Chronos only sees one price/return series. It cannot "see" divergence against volume, RSI from other
   inputs, funding rates, or macro data. Reframe accordingly:
