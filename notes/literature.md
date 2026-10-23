@@ -7,9 +7,15 @@
   Treat their headline backtest Sharpe with skepticism (costs, capacity).
 - **Pretrained TSFMs for Financial Return Forecasting** — Noguer i Alonso & Pereira Franklin (arXiv 2606.27100).
   Generic TSFMs win most rankings but gains over random walk are small and sparse; not reliable alpha engines.
-  Five US equities only; significance (p<0.05) in just two cases. Per a search summary (not yet read in full) it
-  concludes generic pretraining is "not a substitute for finance-native pretraining" — so it doesn't contradict
-  our premise as much as it first seemed. Verify against the PDF before citing.
+  Five US equities only; significance (p<0.05) in just two cases.
+  Quote verified 2026-10-23 against arxiv.org/html/2606.27100 (v1, 25 Jun 2026; page dated 24 Aug 2026),
+  Sec. 6 "Discussion and Limitations": "generic TSFM pretraining is useful but not a substitute for finance-native
+  pretraining" (sentence opens "Finally, the results are consistent with contemporaneous evidence...", read
+  alongside Rahimikia et al. 2025). Caveat: they do NOT test finance-native pretraining themselves; it is an
+  interpretation consistent with Rahimikia et al. Their Sec. 2 also summarises Rahimikia et al. as "finance-native
+  pretraining closes much of the gap". Conclusion (Sec. 7): TSFMs are "strong practical defaults for low-data,
+  per-asset financial return forecasting" "but they do not solve the fundamental difficulty of financial return
+  prediction." -> Not in tension with our premise; it's independent support only for "generic alone is weak".
 
 ## Interpretability of TSFMs (what's already done)
 - **Dissecting Chronos** — Mishra (arXiv 2603.10071, ICLR 2026 TSALM workshop). TopK SAEs on Chronos-T5-Large,
