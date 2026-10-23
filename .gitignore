@@ -1,0 +1,6 @@
+data/
+cache/
+__pycache__/
+*.pt
+*.safetensors
+.ipynb_checkpoints/
