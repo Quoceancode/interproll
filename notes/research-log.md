@@ -53,3 +53,17 @@ Stop: A and B both collapsed at L=512 -> stop, report, no e01. Every other outco
 -> report and wait for Chase. Every verdict reported with its mean IC + CI (daily ICs ~0.01–0.03 are typically
 meaningful).
 Ran: nothing yet.
+
+## 2026-10-23 — e00 step 3: data (no models, no forecasts)
+Ran: `experiments/e00_collapse/fetch_data.py {constituents,rf,prices}`, `universe.py`, `build_panel.py`.
+Result:
+- Universe: fja05680 (commit a2430f2a, row 2023-12-18) and Wikipedia rev 1192789360 agree exactly: 503 = 503
+  (after fixing my parser for `{{BZX link|CBOE}}`). Minus GOOG/FOX/NWS -> 500. Not independent sources
+  (fja uses Wikipedia changes since 2019).
+- Yahoo: 20 HTTP 404; 5 truncated stubs (AVB, EA, EQR, QRVO, WBD: firstTradeDate 2026-07-17, 1–62 days;
+  same on one retry); PARA symbol now Banzai International (history is Banzai's) -> excluded.
+  474/500 usable (26 = 5.2% missing). Some 404s are likely renames (unverified), see STATUS.
+- Panel: 2024-01-02..2026-08-31 (RF ends 2026-08-31), 668 days x 474 stocks = 316,632 stock-days, no missing
+  RF days. Median |exret| 0.0099, std 0.0205; 1 clip (MRNA 2026-08-19 +177%, level persists: unverified).
+  Spot checks: NVDA 2025-01-27 -16.97% (known ~-17%); GL 2024-04-11 -53% (known short-report drop).
+Next: Chase reviews missing tickers / renames; then models (step 4).

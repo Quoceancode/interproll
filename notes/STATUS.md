@@ -12,8 +12,11 @@ _Overwrite this file at the end of each session. Keep it under one screen._
 - Novelty re-check done 2026-10-23 (see literature.md "Search log"): gap still open; nearest prior work is
   time2time (2509.05801). Claim narrowly.
 
+- e00 step 3 (data) done: panel of 474 stocks x 668 eval days (2024-01-02..2026-08-31). Models not downloaded.
+
 ## Blockers
-- None.
+- Chase to review: 20 Yahoo 404s (some likely renames: CDAY->DAY, FLT->CPAY, PEAK->DOC, unverified; BK, MMC,
+  FI, CTRA unexplained), 5 truncated stubs, MRNA +177% day. See data/raw/e00/missing_tickers.csv.
 
 ## Next steps
 1. e00: measure forecast variance / collapse for the generic Chronos and FinText Chronos-Small on the same

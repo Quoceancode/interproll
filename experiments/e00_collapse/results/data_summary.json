@@ -1,0 +1,27 @@
+{
+  "built_utc": "2026-10-23T22:55:14+00:00",
+  "universe_included": 500,
+  "tickers_with_data": 474,
+  "unusable_no_data": 26,
+  "unusable_pct": 5.2,
+  "reason_counts": {
+    "http_404": 20,
+    "name_mismatch_check": 7,
+    "yahoo_truncated": 5,
+    "short_history": 4,
+    "excluded_data_error": 1
+  },
+  "rf_first": "1926-07-01",
+  "rf_last": "2026-08-31",
+  "panel_first": "2021-06-02",
+  "window_end": "2026-08-31",
+  "eval_start": "2024-01-02",
+  "eval_trading_days": 668,
+  "eval_stock_days": 316632,
+  "rf_daily_mean_eval": 0.00018443113772455096,
+  "exret_median_abs": 0.009857582707007307,
+  "exret_std": 0.020532548406976124,
+  "exret_min": -0.5316018142287967,
+  "exret_max": 1.0,
+  "n_clipped": 1
+}

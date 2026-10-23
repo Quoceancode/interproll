@@ -1,0 +1,4 @@
+ticker,yahoo_symbol,in_fja,in_wikipedia,wiki_name,status
+FOX,FOX,True,True,Fox Corporation,dropped_share_class
+GOOG,GOOG,True,True,Alphabet Inc.,dropped_share_class
+NWS,NWS,True,True,News Corp,dropped_share_class

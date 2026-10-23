@@ -1,0 +1,38 @@
+{
+  "experiment": "e00_collapse",
+  "universe_date": "2023-12-31",
+  "constituents": {
+    "primary": {
+      "source": "fja05680/sp500",
+      "file": "S&P 500 Historical Components & Changes (Updated).csv",
+      "commit": "a2430f2af0c79ddf0748e91de11bdeb1616ab5a7",
+      "license": "MIT"
+    },
+    "crosscheck": {
+      "source": "Wikipedia: List of S&P 500 companies",
+      "revid": 1192789360,
+      "rev_timestamp": "2023-12-31T09:32:39Z"
+    },
+    "drop_duplicate_share_classes": ["GOOG", "FOX", "NWS"]
+  },
+  "prices": {
+    "source": "Yahoo chart API v8 (adjclose)",
+    "start": "2021-06-01",
+    "min_interval_s": 1.0
+  },
+  "risk_free": {
+    "source": "Ken French data library, F-F_Research_Data_Factors_daily_CSV.zip, column RF (percent)",
+    "url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_daily_CSV.zip"
+  },
+  "exclude": {
+    "PARA": "Yahoo symbol PARA now belongs to Banzai International; the cached history is Banzai's (adjclose 21006 on 2024-01-05, +98% and +96% days), not Paramount Global"
+  },
+  "eval_start": "2024-01-02",
+  "contexts": [512, 252],
+  "min_first_date": "2021-12-31",
+  "models": {
+    "A": "FinText/Chronos_Small_2023_US",
+    "B": "amazon/chronos-t5-small",
+    "C": "amazon/chronos-t5-small"
+  }
+}
