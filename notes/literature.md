@@ -56,6 +56,45 @@
 - **Kronos** (arXiv 2508.02739, AAAI). Finance K-line foundation model; no interpretability work found on it.
   Possible second finance-pretrained model for a robustness check (different tokenizer, though).
 
+## FinText checkpoints on Hugging Face (checked 2026-10-23; nothing downloaded)
+Sources: HF API `api/models?author=FinText`, model cards + `config.json` for Chronos_{Tiny,Mini,Small}_2011_US,
+Chronos_Small_2011_Global, Chronos_Small_2011_Augmented; paper arxiv.org/html/2511.18578 (Sec. 2.2, 3.1, 4.1–4.3, 5).
+- **Repos:** `FinText/<Family>_<YYYY>_<Region>`, YYYY = 2000..2023, Region in {US, Global, Augmented}
+  (Augmented is named `<Family>_<YYYY>_Augmented`). Families: Chronos_Tiny, Chronos_Mini, Chronos_Small,
+  TimesFM_8M, TimesFM_20M. 5 families x 24 years x 3 = 360 repos. No Chronos Base/Large/Bolt.
+  Collections updated 2025-11-11 (e.g. huggingface.co/collections/FinText/chronos-small-us).
+- **License:** apache-2.0 on every repo listed.
+- **Sizes:** Chronos_Small 46.2M params (F32 safetensors). Tiny/Mini ~8M/20M per paper footnote 11.
+- **"2011" / "US":** card: "pre-trained on U.S. financial time series data up to the year 2011 ... spans from
+  1990–2011 ... all U.S. excess return data". Paper: expanding window; "the model estimated for year t is employed
+  to produce forecasts for year t+1". US = CRSP, NYSE/AMEX/NASDAQ. Global = 94 countries (CRSP for US +
+  Compustat Global, primary venue only). Exact end date (Dec 31?) not stated.
+- **"Augmented":** card text says only "augmented financial time series data"; region not stated; undefined on card.
+  Paper mentions "synthetic data augmentation" (abstract) and "JKP-augmented" global data (JKP factors, Jensen et
+  al. 2023) but the method isn't in the text I could read. Card inconsistency: Chronos_Small_2011_Augmented says
+  "up to the year 2012 ... 1990–2012". Avoid Augmented checkpoints until clarified.
+- **Input preprocessing (paper):**
+  - Daily **excess** returns: return incl. dividends, "net of the local risk-free rate". Risk-free source: **not stated**.
+  - Filters: drop nonpositive/missing prices; US price < $5 removed; bottom 5% market cap per country-day removed;
+    |ret| > 1000% treated as errors; delisting with missing return -> -30%.
+  - Winsorized to [-1, 1] (Eq. 14), returns in decimal units. No x100 scaling stated.
+  - Scaling: only Chronos's own mean-absolute scaling inside the tokenizer (Sec. 2.2). Nothing extra stated.
+  - Context windows evaluated: 5, 21, 252, 512 trading days; horizon: next-day excess return.
+  - Point forecast: "conditional expectation ... via Monte Carlo sampling"; sample count and mean-vs-median **not stated**.
+  - Pretraining window/prediction length used during FinText pretraining: **not stated** (config keeps Chronos
+    defaults: context_length 512, prediction_length 64, num_samples 20).
+- **Architectural matches (config.json compared field by field):**
+  | FinText | generic match | T5 config (layers enc/dec, d_model, d_ff, heads) |
+  |---|---|---|
+  | Chronos_Tiny_* | amazon/chronos-t5-tiny | 4/4, 256, 1024, 4 |
+  | Chronos_Mini_* | amazon/chronos-t5-mini | 4/4, 384, 1536, 8 |
+  | Chronos_Small_* | amazon/chronos-t5-small | 6/6, 512, 2048, 8 |
+  Identical chronos_config too (MeanScaleUniformBins, limits ±15, 4096 tokens, ctx 512, pred 64). FinText
+  `_name_or_path` = google/t5-efficient-{tiny,mini,small}. Like-for-like comparisons are possible for
+  Tiny/Mini/Small only; Dissecting Chronos used Large, which has no FinText counterpart.
+  TimesFM_8M/20M have no generic Google checkpoint of the same size (Google released 200M/500M) -> random-init
+  baseline only for those.
+
 ## Overlap check against our claim (2026-10-23)
 - **Toward Structured Financial Foundation Models** — Raman, Mishra, Potluru, Ganesh (arXiv 2610.26516, Oct 2026): position paper proposing modular, domain-specialised financial foundation models; no experiments or internal analysis. **No overlap** (watch authors for follow-ups).
 - **Foundations without Fundamentals: Zero-Shot Blind Spots in Time Series FMs** — Ghoroghchian et al. (ICML 2026): SimpleTimeBench "unit tests" show Chronos-2, Moirai, Toto fail simple trends/periodicity/leading-indicator covariates zero-shot, and fine-tuning fixes one pattern while degrading others; behavioural only, no finance data. **No overlap**; relevant caution that fine-tuned/finance-trained models may trade off generic skills (check in e01).
