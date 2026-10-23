@@ -17,6 +17,15 @@ builds on time2time (2509.05801).
 6. Readable-vs-used gap per finance factor, compared across the two models: for each factor, probe
    accessibility vs forecast response to an intervention (cf. Dynamical Parameters, 2609.34316).
 
+## Future interp questions
+- FinText constant-input behaviour: given a constant return series (0.001 x 512), FinText Chronos_Small_2023_US
+  forecasts its lowest bin (median -0.015, i.e. -15 x scale) while generic chronos-t5-small returns ~0.001.
+  On realistic returns it is sane (e00 model_checks, 2026-10-23). Which features/heads produce the jump to the
+  extreme bin? Is it a learned "zero-variance context = OOD -> crash" feature, a volatility-normalisation
+  artefact (mean-scaling of a series with no variance), or tied to how FinText saw flat/missing segments in
+  pretraining? Test: vary constant level and add tiny noise; locate the layer where the residual stream diverges
+  from generic.
+
 ## Controls to add
 - Generic-skill cost: run both models on synthetic generic series (trend, seasonality, cf. SimpleTimeBench in
   "Foundations without Fundamentals", ICML 2026). Did finance pretraining cost generic skills? Also separates
