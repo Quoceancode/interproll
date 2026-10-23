@@ -14,9 +14,16 @@ _Overwrite this file at the end of each session. Keep it under one screen._
 
 - e00 step 3 (data) done: panel of 474 stocks x 668 eval days (2024-01-02..2026-08-31). Models not downloaded.
 
+- e00 runs on 474 stocks (decided). MRNA +177% day verified real (decisions.md).
+
 ## Blockers
-- Chase to review: 20 Yahoo 404s (some likely renames: CDAY->DAY, FLT->CPAY, PEAK->DOC, unverified; BK, MMC,
-  FI, CTRA unexplained), 5 truncated stubs, MRNA +177% day. See data/raw/e00/missing_tickers.csv.
+- Chase reviewing the wrong-company screen: `experiments/e00_collapse/results/move_screen.csv` (6 moves > 40%,
+  0 level jumps > 5x, 4 late first dates). Panel unchanged until reviewed.
+
+## Tasks before e01
+- Research the 20 Yahoo 404s and 5 truncated tickers (AVB, EA, EQR, QRVO, WBD) with cited sources; map confirmed
+  same-security renames in `experiments/e00_collapse/ticker_map.csv` (candidates, unverified: CDAY->DAY,
+  FLT->CPAY, PEAK->DOC; BK, MMC, FI, CTRA unexplained). See data/raw/e00/missing_tickers.csv.
 
 ## Next steps
 1. e00: measure forecast variance / collapse for the generic Chronos and FinText Chronos-Small on the same
