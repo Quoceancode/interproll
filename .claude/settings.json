@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "ask": [
+      "Bash(pip install*)",
+      "Bash(pip uninstall*)",
+      "Bash(pip3 install*)",
+      "Bash(pip3 uninstall*)",
+      "Bash(python -m pip*)",
+      "Bash(python3 -m pip*)",
+      "Bash(sudo*)",
+      "Bash(git push*)",
+      "PowerShell(git push*)",
+      "Edit(.claude/**)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/ask_guard.sh\"",
+            "timeout": 10,
+            "onFailure": "block"
+          }
+        ]
+      }
+    ]
+  }
+}
