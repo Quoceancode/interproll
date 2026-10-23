@@ -1,0 +1,64 @@
+{
+  "models": {
+    "FinText/Chronos_Small_2023_US": {
+      "revision": "f60a282f3dbead8e054154b8bc8d83b227f8693b",
+      "files": [
+        "config.json",
+        "generation_config.json",
+        "model.safetensors"
+      ],
+      "model_safetensors_sha256": "794d945d2dc068926242862c8080f3f98d456cb96244034fda18f7d589dc31b5"
+    },
+    "amazon/chronos-t5-small": {
+      "revision": "a971ba21945c4f1796b17a91fe69214b5f4ad472",
+      "files": [
+        "config.json",
+        "generation_config.json",
+        "model.safetensors"
+      ],
+      "model_safetensors_sha256": "9c8b6fde5300f72b01c173153bf9288fa0a200614275bf0585071ad71a6a3d43"
+    }
+  },
+  "config_differences": {},
+  "ignored_config_fields": {
+    "transformers_version": [
+      "4.41.0.dev0",
+      "4.31.0"
+    ],
+    "_name_or_path": [
+      "google/t5-efficient-small",
+      null
+    ],
+    "classifier_dropout": [
+      0.0,
+      null
+    ]
+  },
+  "constant_input": {
+    "FinText/Chronos_Small_2023_US": {
+      "input": 0.001,
+      "median": -0.015000000596046448,
+      "min": -0.015000000596046448,
+      "max": 0.001832844689488411
+    },
+    "amazon/chronos-t5-small": {
+      "input": 0.001,
+      "median": 0.0009970675455406308,
+      "min": 0.0009970675455406308,
+      "max": 0.0009970675455406308
+    }
+  },
+  "armC_roundtrip": {
+    "true_daily_std": 0.015,
+    "median_abs_implied_return": 0.008847547598153094,
+    "std_implied_return": 0.0155376115750747,
+    "share_exactly_zero": 0.0
+  },
+  "tokenizer": {
+    "class": "MeanScaleUniformBins",
+    "n_centers": 4093,
+    "center_min": -15.0,
+    "center_max": 15.0,
+    "bin_width_scaled_units": 0.007331371307373047
+  }
+}

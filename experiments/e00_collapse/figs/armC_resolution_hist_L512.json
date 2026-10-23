@@ -1,0 +1,6 @@
+{
+  "script": "armC_resolution.py",
+  "context": 512,
+  "bin_width_scaled": 0.007331371307373047,
+  "eval_start": "2024-01-02"
+}

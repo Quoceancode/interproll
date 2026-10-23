@@ -67,3 +67,20 @@ Result:
   RF days. Median |exret| 0.0099, std 0.0205; 1 clip (MRNA 2026-08-19 +177%, level persists: unverified).
   Spot checks: NVDA 2025-01-27 -16.97% (known ~-17%); GL 2024-04-11 -53% (known short-report drop).
 Next: Chase reviews missing tickers / renames; then models (step 4).
+
+## 2026-10-23 — e00 step 4: models, sanity checks, arm C resolution, bench (no eval forecasts yet)
+Ran: `model_checks.py`, `armC_resolution.py`, `run_forecasts.py --bench 1000`; tests/test_models.py (7 ok).
+Result:
+- Both snapshots = config.json, generation_config.json, model.safetensors only. Configs equal field by field.
+- Constant input (0.001 x 512): generic returns 0.000997; FinText forecasts the LOWEST bin (median -0.015).
+  On realistic inputs (64 real 2023 S&P contexts, pre-eval; 64 synthetic t4 returns) FinText is sane: 0 samples
+  at the lowest bin, median forecasts ~0. Interpretation: constant returns are out of distribution for a
+  returns-only model; not evidence of a preprocessing mismatch. Unexplained, noted.
+- Arm C round trip on synthetic random walks: implied-return std 0.0155 vs true 0.015.
+- Arm C resolution (L=512): step = median 0.66% of price (5–95%: 0.48–1.02%) vs median |R| 0.96%; per stock,
+  step / median move = 0.72 (0.41–0.96); 37% of next-day moves smaller than one bin, 20% smaller than half.
+  Arms A/B step: median 0.009%; 0.6% of moves smaller than one bin. L=252 similar (38% / 0.6%).
+  -> Arm C can barely express typical daily moves; its Ties may be high for tokenizer reasons (pre-registered
+  "inconclusive (tokenizer resolution)" rule applies).
+- Bench (batch 32): 165 series/s at L=512, 333 at L=252; all 9 runs est. 238.6 min.
+Next: Chase approves -> full forecast runs.

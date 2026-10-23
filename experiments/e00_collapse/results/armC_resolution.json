@@ -1,0 +1,71 @@
+{
+  "bin_width_scaled_units": 0.007331371307373047,
+  "L512": {
+    "n_stock_days": 315558,
+    "armC_width_quantiles": {
+      "0.05": 0.00475,
+      "0.25": 0.00585,
+      "0.5": 0.00662,
+      "0.75": 0.00761,
+      "0.95": 0.01021
+    },
+    "armAB_width_quantiles": {
+      "0.05": 6.25e-05,
+      "0.25": 7.61e-05,
+      "0.5": 8.97e-05,
+      "0.75": 0.0001112,
+      "0.95": 0.0001538
+    },
+    "realised_abs_ret_quantiles": {
+      "0.05": 0.00085,
+      "0.25": 0.00438,
+      "0.5": 0.0096,
+      "0.75": 0.01787,
+      "0.95": 0.03974
+    },
+    "armC_width_over_stock_median_move_quantiles": {
+      "0.05": 0.405,
+      "0.25": 0.597,
+      "0.5": 0.72,
+      "0.75": 0.844,
+      "0.95": 0.961
+    },
+    "armC_share_moves_smaller_than_one_bin": 0.37257176176804263,
+    "armC_share_moves_smaller_than_half_bin": 0.1951115167417717,
+    "armAB_share_moves_smaller_than_one_bin": 0.005887982557881594
+  },
+  "L252": {
+    "n_stock_days": 316353,
+    "armC_width_quantiles": {
+      "0.05": 0.00549,
+      "0.25": 0.00633,
+      "0.5": 0.00693,
+      "0.75": 0.00767,
+      "0.95": 0.0093
+    },
+    "armAB_width_quantiles": {
+      "0.05": 5.97e-05,
+      "0.25": 7.37e-05,
+      "0.5": 8.84e-05,
+      "0.75": 0.0001105,
+      "0.95": 0.0001569
+    },
+    "realised_abs_ret_quantiles": {
+      "0.05": 0.00085,
+      "0.25": 0.00438,
+      "0.5": 0.0096,
+      "0.75": 0.01786,
+      "0.95": 0.03972
+    },
+    "armC_width_over_stock_median_move_quantiles": {
+      "0.05": 0.424,
+      "0.25": 0.616,
+      "0.5": 0.747,
+      "0.75": 0.867,
+      "0.95": 0.997
+    },
+    "armC_share_moves_smaller_than_one_bin": 0.38441234949565833,
+    "armC_share_moves_smaller_than_half_bin": 0.2015122347504212,
+    "armAB_share_moves_smaller_than_one_bin": 0.00580996544998783
+  }
+}

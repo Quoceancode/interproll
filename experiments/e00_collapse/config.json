@@ -34,5 +34,11 @@
     "A": "FinText/Chronos_Small_2023_US",
     "B": "amazon/chronos-t5-small",
     "C": "amazon/chronos-t5-small"
-  }
+  },
+  "revisions": {
+    "FinText/Chronos_Small_2023_US": "f60a282f3dbead8e054154b8bc8d83b227f8693b",
+    "amazon/chronos-t5-small": "a971ba21945c4f1796b17a91fe69214b5f4ad472"
+  },
+  "num_samples": 20,
+  "batch_size": 32
 }
