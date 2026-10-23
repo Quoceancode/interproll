@@ -49,9 +49,10 @@
 - **VAIOM** (arXiv 2607.13929). Finance sequence model trained from scratch; performance/ablations, no interp.
 - **Kronos** (arXiv 2508.02739, AAAI). Finance K-line foundation model; no interpretability work found on it.
   Possible second finance-pretrained model for a robustness check (different tokenizer, though).
-- **Toward Structured Financial Foundation Models** — Raman, Mishra, Potluru, Ganesh (arXiv 2610.26516, Oct 2026).
-  Position paper / research agenda. Mentions specialists "may learn incompatible representations" but no analysis.
-  Watch these authors for follow-ups.
+
+## Overlap check against our claim (2026-10-23)
+- **Toward Structured Financial Foundation Models** — Raman, Mishra, Potluru, Ganesh (arXiv 2610.26516, Oct 2026): position paper proposing modular, domain-specialised financial foundation models; no experiments or internal analysis. **No overlap** (watch authors for follow-ups).
+- **Foundations without Fundamentals: Zero-Shot Blind Spots in Time Series FMs** — Ghoroghchian et al. (ICML 2026): SimpleTimeBench "unit tests" show Chronos-2, Moirai, Toto fail simple trends/periodicity/leading-indicator covariates zero-shot, and fine-tuning fixes one pattern while degrading others; behavioural only, no finance data. **No overlap**; relevant caution that fine-tuned/finance-trained models may trade off generic skills (check in e01).
 
 ## Analogy for our framing
 - **Pathology foundation model SAEs** (arXiv 2407.10785). Domain-specific features appear in the domain-pretrained
