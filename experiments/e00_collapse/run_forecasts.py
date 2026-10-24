@@ -65,12 +65,14 @@ def build_tasks(panel: pd.DataFrame, context: int) -> dict:
                 else v) for k, v in rows.items()}
 
 
-def forecast(pipe, contexts: np.ndarray, batch_size: int, num_samples: int) -> np.ndarray:
-    """Samples of the next value for each context, shape (n, num_samples)."""
+def forecast(pipe, contexts: np.ndarray, batch_size: int, num_samples: int,
+             top_k: int | None = None) -> np.ndarray:
+    """Samples of the next value for each context, shape (n, num_samples). top_k=None -> model-config default."""
     out = []
     for i in range(0, len(contexts), batch_size):
         batch = torch.from_numpy(contexts[i:i + batch_size])
-        out.append(pipe.predict(batch, prediction_length=1, num_samples=num_samples)[:, :, 0].numpy())
+        samples = pipe.predict(batch, prediction_length=1, num_samples=num_samples, top_k=top_k)
+        out.append(samples[:, :, 0].numpy())
     return np.concatenate(out)
 
 
@@ -81,13 +83,14 @@ def to_excess_returns(arm: str, samples: np.ndarray, tasks: dict, idx: np.ndarra
     return np.clip(implied, -1.0, 1.0)
 
 
-def run(arm: str, context: int, seed: int, tasks: dict, pipe, limit: int | None = None) -> pd.DataFrame:
+def run(arm: str, context: int, seed: int, tasks: dict, pipe, limit: int | None = None,
+        top_k: int | None = None) -> pd.DataFrame:
     torch.manual_seed(seed)
     n = len(tasks["target"]) if limit is None else min(limit, len(tasks["target"]))
     idx = np.arange(n)
     contexts = tasks["lvl_ctx" if arm == "C" else "ret_ctx"][idx]
-    samples = to_excess_returns(arm, forecast(pipe, contexts, CONFIG["batch_size"], CONFIG["num_samples"]),
-                                tasks, idx).astype(np.float32)
+    raw = forecast(pipe, contexts, CONFIG["batch_size"], CONFIG["num_samples"], top_k)
+    samples = to_excess_returns(arm, raw, tasks, idx).astype(np.float32)
     frame = pd.DataFrame({"target_date": tasks["target_date"][:n], "ticker": tasks["ticker"][:n],
                           "target": tasks["target"][idx], "mean": samples.mean(axis=1),
                           "median": np.median(samples, axis=1), "std": samples.std(axis=1)})
@@ -132,6 +135,8 @@ def main() -> None:
     parser.add_argument("--arm", choices=["A", "B", "C"])
     parser.add_argument("--context", type=int, choices=CONFIG["contexts"])
     parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--top-k-off", action="store_true",
+                        help="EXPLORATORY: disable top-k truncation (top_k = full vocabulary); output *_topkoff")
     args = parser.parse_args()
     if args.bench:
         bench(args.bench)
@@ -139,9 +144,13 @@ def main() -> None:
     panel = pd.read_parquet(REPO / "data" / "processed" / "e00" / "panel.parquet")
     tasks = build_tasks(panel, args.context)
     pipe = load_chronos(CONFIG["models"][args.arm], CONFIG["revisions"][CONFIG["models"][args.arm]])
-    frame = run(args.arm, args.context, args.seed, tasks, pipe)
+    # top_k = vocabulary size keeps every token, so no truncation regardless of how a library treats top_k=0.
+    top_k = pipe.model.config.n_tokens if args.top_k_off else None
+    suffix = "_topkoff" if args.top_k_off else ""
+    print(f"top_k: {top_k if top_k is not None else 'model-config default'}", flush=True)
+    frame = run(args.arm, args.context, args.seed, tasks, pipe, top_k=top_k)
     OUT.mkdir(parents=True, exist_ok=True)
-    frame.to_parquet(OUT / f"forecasts_{args.arm}_L{args.context}_s{args.seed}.parquet", index=False)
+    frame.to_parquet(OUT / f"forecasts_{args.arm}_L{args.context}_s{args.seed}{suffix}.parquet", index=False)
     print(f"wrote {len(frame)} forecasts")
 
 
