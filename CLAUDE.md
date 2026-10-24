@@ -56,6 +56,22 @@ reports. When a result is ambiguous, report it as ambiguous; do not round up.
 - Report effect sizes with confidence intervals across seeds and time periods; correct for multiple comparisons.
 - Negative results go in `findings.md` too.
 
+## Results convention (standing rule, every experiment)
+Every experiment's results live in three files under `experiments/<id>/results/`:
+- `RESULTS_FACTS.md` — cold, factual, complete: numbers, CIs, sample sizes, verdicts mechanically applied per the
+  pre-registered rules, exact provenance (commits, configs, commands). No interpretive language (no "suggests",
+  "supports", "likely", "because", "interesting") and no explanations of why something happened. Pre-registered
+  and exploratory results in clearly separate sections. Unexplained observations stated as observations only.
+  A Definitions section gives the exact formula and threshold for every metric used.
+- `RESULTS_AGENT_INTERPRETATION.md` — Claude's interpretation, headed as AI-written: what the results mean,
+  alternative explanations, strength of evidence per claim (strong / moderate / weak / speculative), design
+  weaknesses including rule gaps, recommended next steps. Never edit it after Chase starts his own
+  interpretation; if new results arrive, append a dated section instead.
+- `RESULTS_CHASE.md` — template for Chase's own interpretation: section headings and guiding questions only.
+  Claude never writes answers or hints into this file.
+`notes/findings.md` entries link to the facts file and state only the factual verdicts.
+Chase's interpretation is authoritative. Claude implements and reports; it doesn't decide what results mean.
+
 ## Layout
 ```
 CLAUDE.md          this file
