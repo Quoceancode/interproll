@@ -1,0 +1,108 @@
+{
+  "note": "EXPLORATORY, not pre-registered.",
+  "A_L512_s0": {
+    "n_forecasts": 315558,
+    "coverage_q10_q90": 0.14552316848249766,
+    "coverage_q25_q75": 0.08563560423123483,
+    "median_sample_std": 0.0018740815576165915,
+    "median_q90_minus_q10": 0.004727420695417095,
+    "target_std": 0.020947745069861412,
+    "median_abs_target": 0.00959768146276474,
+    "median_sample_range_bins": 70.0171088630749,
+    "p99_sample_range_bins": 225.0550044692909,
+    "median_abs_target_bins": 104.97543198588522,
+    "share_rows_with_extreme_bin_sample": 0.0028552595719328936
+  },
+  "B_L512_s0": {
+    "n_forecasts": 315558,
+    "coverage_q10_q90": 0.13515106573118096,
+    "coverage_q25_q75": 0.07968107289309731,
+    "median_sample_std": 0.0018581240437924862,
+    "median_q90_minus_q10": 0.004662697971798481,
+    "target_std": 0.020947745069861412,
+    "median_abs_target": 0.00959768146276474,
+    "median_sample_range_bins": 69.016870842038,
+    "p99_sample_range_bins": 115.02810090962444,
+    "median_abs_target_bins": 104.97543198588522,
+    "share_rows_with_extreme_bin_sample": 2.852090582396897e-05
+  },
+  "C_L512_s0": {
+    "n_forecasts": 315558,
+    "coverage_q10_q90": 0.6754606126290571,
+    "coverage_q25_q75": 0.4060774881321342,
+    "median_sample_std": 0.014269324019551277,
+    "median_q90_minus_q10": 0.03133838176727295,
+    "target_std": 0.020947745069861412,
+    "median_abs_target": 0.00959768146276474
+  },
+  "A_L512_s1": {
+    "n_forecasts": 315558,
+    "coverage_q10_q90": 0.14571330785465747,
+    "coverage_q25_q75": 0.08552785858701095,
+    "median_sample_std": 0.0018751505995169282,
+    "median_q90_minus_q10": 0.004727027041371913,
+    "target_std": 0.020947745069861412,
+    "median_abs_target": 0.00959768146276474,
+    "median_sample_range_bins": 70.0171092403148,
+    "p99_sample_range_bins": 225.05501599590704,
+    "median_abs_target_bins": 104.97543198588522,
+    "share_rows_with_extreme_bin_sample": 0.0028045557393569487
+  },
+  "B_L512_s1": {
+    "n_forecasts": 315558,
+    "coverage_q10_q90": 0.13488803959969325,
+    "coverage_q25_q75": 0.07999163386762496,
+    "median_sample_std": 0.0018573312554508448,
+    "median_q90_minus_q10": 0.004661481722723693,
+    "target_std": 0.020947745069861412,
+    "median_abs_target": 0.00959768146276474,
+    "median_sample_range_bins": 69.01687166183677,
+    "p99_sample_range_bins": 114.0278776586148,
+    "median_abs_target_bins": 104.97543198588522,
+    "share_rows_with_extreme_bin_sample": 2.852090582396897e-05
+  },
+  "C_L512_s1": {
+    "n_forecasts": 315558,
+    "coverage_q10_q90": 0.6760753965990405,
+    "coverage_q25_q75": 0.4064989637404217,
+    "median_sample_std": 0.014259101822972298,
+    "median_q90_minus_q10": 0.031362107396125806,
+    "target_std": 0.020947745069861412,
+    "median_abs_target": 0.00959768146276474
+  },
+  "A_L252_s0": {
+    "n_forecasts": 316353,
+    "coverage_q10_q90": 0.14705724301650372,
+    "coverage_q25_q75": 0.08662475146434521,
+    "median_sample_std": 0.0018895921530202031,
+    "median_q90_minus_q10": 0.004746847704518588,
+    "target_std": 0.020937519147992134,
+    "median_abs_target": 0.009593521244823933,
+    "median_sample_range_bins": 72.01760389370972,
+    "p99_sample_range_bins": 229.0559880881441,
+    "median_abs_target_bins": 107.23315657355707,
+    "share_rows_with_extreme_bin_sample": 0.003100966325591981
+  },
+  "B_L252_s0": {
+    "n_forecasts": 316353,
+    "coverage_q10_q90": 0.12867587789589477,
+    "coverage_q25_q75": 0.07546316930770373,
+    "median_sample_std": 0.0017861921805888414,
+    "median_q90_minus_q10": 0.004464250162709505,
+    "target_std": 0.020937519147992134,
+    "median_abs_target": 0.009593521244823933,
+    "median_sample_range_bins": 69.01686220614685,
+    "p99_sample_range_bins": 111.0271150527091,
+    "median_abs_target_bins": 107.23315657355707,
+    "share_rows_with_extreme_bin_sample": 4.109333560927192e-05
+  },
+  "C_L252_s0": {
+    "n_forecasts": 316353,
+    "coverage_q10_q90": 0.6812263515756133,
+    "coverage_q25_q75": 0.4107468555695694,
+    "median_sample_std": 0.014390860684216022,
+    "median_q90_minus_q10": 0.03174935579299927,
+    "target_std": 0.020937519147992134,
+    "median_abs_target": 0.009593521244823933
+  }
+}
