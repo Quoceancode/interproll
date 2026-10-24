@@ -30,4 +30,9 @@ _One line per decision: date — decision — reason. Revisit, don't silently ch
 - 2026-10-23 — `experiments/e00_collapse/explore.py` (paired IC differences, raw-input baselines, correlation with -r_t) was written AFTER seeing the pre-registered results and is labelled exploratory everywhere. It does not change any verdict.
 - 2026-10-23 — Lesson for future pre-registrations (from e00): give every comparative hypothesis a numeric threshold (e00's H1 "B weaker than A" had none, so it could not be applied mechanically).
 - 2026-10-23 — Lesson for future pre-registrations (from e00): any collapse-style rule must include a "spread but uninformative" category (dispersed forecasts whose IC CI includes 0). e00's rule only caught "flat and uninformative", so B and C counted as "not collapsed".
+- 2026-10-24 — e01 point forecast (fixed before any e01 work): the exact-distribution median, i.e. the median of the full first-step distribution over value bins, with no sampling (`experiments/e00_collapse/exact_forecasts.py`, variant `full_median`). Reasons:
+  - It is deterministic: no seed, temperature or top_k.
+  - It is robust to tail bins.
+  - Its A−B gap was stable across the full and top-50 variants: 0.0169 [0.0060, 0.0266] full, 0.0168 [0.0096, 0.0246] top-50.
+  - Caveat: this choice was informed by exploratory e00 results (not pre-registered). e01 must test it on its own pre-registered terms and must not treat the e00 numbers as confirmation.
 - 2026-10-23 — Keep httpx2 / httpcore2 2.16.0 — verified genuine Pydantic packages (github.com/pydantic/httpx2); required by huggingface_hub 2.3.0.

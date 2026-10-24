@@ -50,7 +50,7 @@ generic Chronos/Toto hidden states with equity crash regimes. It is the nearest 
     search shallow.
   - Re-check before any write-up.
 
-### e00 — forecast-collapse check (done; facts: [RESULTS_FACTS.md](../experiments/e00_collapse/results/RESULTS_FACTS.md))
+### e00 — forecast-collapse check (COMPLETE 2026-10-24; e01 will use the exact-distribution median as its point forecast, see decisions.md; facts: [RESULTS_FACTS.md](../experiments/e00_collapse/results/RESULTS_FACTS.md))
 - **Design:** S&P 500 as of 2023-12-31 (474 usable stocks); next-day excess returns, 2024-01-02 .. 2026-08-31.
   - Arm A: FinText Chronos_Small_2023_US on returns.
   - Arm B: generic chronos-t5-small on returns.
