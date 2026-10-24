@@ -106,3 +106,21 @@ Result (details and provenance in findings.md F1):
 - **Surprise:** A and B 80% intervals cover only about 14%. Candidate cause: the top_k=50 sampling default.
   Unconfirmed.
 Next: Chase reviews. Open choices: whether e01 proceeds on the IC gap; whether to rerun A/B with top_k disabled.
+
+## 2026-10-23 — Records restructure + e00 top_k sensitivity (exploratory)
+- **Records:**
+  - Results convention added to CLAUDE.md.
+  - e00 results split into RESULTS_FACTS / RESULTS_AGENT_INTERPRETATION / RESULTS_CHASE.
+  - New notes/PROJECT_STATE.md with the roadmap.
+  - e01 recorded and on hold (questions.md).
+  - Pre-registration lessons added to decisions.md.
+  - Chase is pausing experiments for foundations work.
+- **Hypothesis (exploratory, stated before the run):** top_k = 50 causes the narrow A/B intervals. Falsified if
+  coverage stays far below nominal with top_k off.
+- **Ran:** `bash experiments/e00_collapse/run_topk.sh` (A and B, L512 s0, top_k = 4096), code 2de0de7.
+- **Result:**
+  - 80% coverage 0.722 (A) / 0.727 (B), up from 0.146 / 0.135.
+  - IC A 0.0038 [−0.0003, 0.0071], B 0.0025 [−0.0015, 0.0062]; A−B 0.0013 [−0.0032, 0.0051].
+  - A top_k off − A default: −0.0188 [−0.0251, −0.0122].
+  - Facts: e00 RESULTS_FACTS.md, last section.
+- **Next:** Chase's foundations work. Open choice: an exact-logit forecast check before e01.

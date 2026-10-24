@@ -8,6 +8,9 @@ _Overwrite this file at the end of each session. Keep it under one screen. For t
 ## Current state
 - e00 done. Results in `experiments/e00_collapse/results/` (facts, agent interpretation, Chase template).
   Verdicts: no arm collapsed; A IC 0.023 (significant), B 0.007 (not), C ≈ 0; H2 falsified.
+- Exploratory top_k-off rerun (A, B; L512 s0): intervals near nominal coverage; A IC 0.004, B 0.003, A−B 0.001
+  (CI includes 0). Facts in RESULTS_FACTS.md, last section. Open: whether to run an exact-logit (no sampling)
+  forecast before e01 (agent interpretation, appended section).
 - Chase is pausing experiments to build foundations (roadmap phase 1).
 
 ## Blockers

@@ -128,3 +128,62 @@ analysis, wide CIs, or rests on an untested assumption); **speculative** (a hypo
 4. **For future pre-registrations:** give every comparative hypothesis a numeric threshold, and add a "spread but
    uninformative" category to collapse-style rules (recorded in decisions.md).
 5. **Optional:** a random-init arm (one run, about 30 min) to anchor the IC scale.
+
+---
+
+## Appended 2026-10-23 — top_k sensitivity (AI-WRITTEN)
+Facts: `RESULTS_FACTS.md`, "Exploratory: top_k sensitivity". This section changes several readings above. The
+sections above are left as written.
+
+### What changed
+- **Calibration:** with top_k off, A and B intervals are close to calibrated. The 80% interval covers 72–73% (it
+  was 14%) and the 50% interval covers 45–46%; sample std is about 0.0155 vs a target std of 0.021.
+  - **The top_k suspicion (§1.7) is confirmed as the main cause of the narrow intervals** — strong.
+  - The models' full distributions are roughly right in width (slightly narrow). The default top_k = 50 cut them
+    about 8× too narrow.
+- **Point skill:** with top_k off, A's IC falls from 0.023 to 0.004 (CI touching 0). B falls from 0.007 to 0.002.
+  The A−B gap is 0.001–0.002 with a CI around 0.
+  - Under full sampling, e00 no longer shows that FinText forecasts better than generic Chronos.
+
+### Two competing explanations — the key open question
+1. **Monte Carlo noise in the point forecast** (my leading explanation — moderate):
+   - The point forecast is the mean (or median) of only 20 samples. With top_k off, each sample has std about
+     0.0155, so the sample mean has a standard error of about 0.0155/√20 ≈ 0.0035.
+   - The cross-sectional spread of A's informative signal under top_k 50 was only about 0.065 × 0.021 ≈ 0.0014.
+     Sampling noise is then about 2.5× the signal, which would wipe out most of the rank IC even if the model's
+     conditional mean were unchanged.
+   - Under top_k 50 the samples were concentrated (std about 0.0019, SE about 0.0004), so the 20-sample mean
+     tracked the model's central tendency closely.
+   - Consistent with this: D rose from 0.065 to 0.27, roughly what adding noise of SE ≈ 0.0035 to a signal of
+     spread 0.0014 would do.
+2. **Truncation itself creates the signal** (alternative — weak to moderate):
+   - top_k 50 keeps the most probable tokens, so the default point forecast tracks the *mode* region of the
+     predicted distribution.
+   - FinText's skill could live in the location of the mode (e.g. a shift toward reversal near 0), not in the full
+     mean, which would be dominated by the tails.
+   - In that case the "skill" is a property of mode-seeking decoding, still real and usable, but it changes what
+     the interp target is.
+
+These are distinguishable cheaply and without sampling noise. Compute the **exact** predictive mean and median
+(and mode) of the next token from the model's logits: one forward pass per context, softmax over the 4,096 bins,
+expectation over bin centres × scale.
+- If A's exact-mean IC is about 0.02 and the A−B gap returns → explanation 1. The default-run finding stands and
+  the top_k-off drop is a measurement artefact.
+- If only the exact mode or median shows the gap → explanation 2.
+- If neither shows it → A's e00 edge depended on truncated decoding.
+
+### Revised strength of earlier claims
+- §1.1 and §1.2 (A has skill; the A−B gap is real): **downgraded from strong to moderate.** They hold under the
+  pre-registered (default) decoding across seeds, years and contexts. They do not hold under full sampling with 20
+  samples, and why is unresolved.
+- §1.4 (reversal vs extrapolation): still **speculative**. The exact-logit check should precede it, since the
+  contrast itself was measured on default-decoded forecasts.
+- §1.6 (spread adds nothing beyond trailing vol): **unchanged.** Spread IC under top_k off is 0.199 / 0.204,
+  still below trailing vol's 0.220.
+- The pre-registered verdicts themselves are unaffected (they were defined on the default decoding).
+
+### Recommended next step (before e01; Chase decides)
+- **An exact-logit forecast for A and B** at L512 over the same tasks. No sampling, so no seed or top_k choice.
+  Report IC for the exact mean, median and mode, and the A−B paired difference.
+- Cost: about 1 GPU-hour or less (one forward pass instead of 20 samples).
+- This also gives e01 a deterministic point forecast to intervene on, which interventions need anyway.

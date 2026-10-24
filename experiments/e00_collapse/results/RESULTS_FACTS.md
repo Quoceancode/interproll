@@ -218,10 +218,72 @@ Mean over days of the daily Spearman(f mean, −r_t).
 | Forecasts | run_forecasts.py (8fcf044), run_all.sh (8a12738) | `bash experiments/e00_collapse/run_all.sh` (tmux session e00) |
 | Pre-registered analysis | analyze.py (8a12738) | `$PY experiments/e00_collapse/analyze.py` |
 | Exploratory 4.1–4.3 | explore.py (538df76) | `cd experiments/e00_collapse && $PY explore.py` |
-| Exploratory 4.4 | calibration.py (commit adding this file) | `$PY experiments/e00_collapse/calibration.py <run names>` |
+| Exploratory 4.4 | calibration.py (518fc2b) | `$PY experiments/e00_collapse/calibration.py <run names>` |
 
 - **Pre-registration:** `notes/research-log.md`, entry "e00 forecast-collapse check: pre-registration", committed
   before any forecast.
 - **Logs:** `cache/e00/logs/` (run logs unfiltered; run_all.log; analyze.log; explore.log; calibration.log).
 - **Forecasts:** `cache/e00/forecasts_{arm}_L{L}_s{seed}.parquet` (git-ignored).
 - **Environment:** `requirements.txt`; torch 2.11.0+cu128; chronos-forecasting 2.3.2; RTX 5070 Ti; batch size 32.
+
+## Exploratory: top_k sensitivity (added 2026-10-23; not pre-registered)
+
+### Setup
+- **Runs:** arms A and B, L = 512, seed 0, with `top_k` = 4096 (the full vocabulary; no truncation).
+- **Unchanged from the main runs:** temperature 1.0, top_p 1.0, 20 samples, the same tasks, batch size 32 and seed.
+- **Default-path check:** with `top_k` unset, the modified script reproduces the stored B_L512_s0 samples exactly
+  (first 64 rows).
+- **Runs:** tmux session `e00_topk`, 2026-10-23 21:09:56 – 22:12:53 (−07:00); both exit 0; 315,558 forecasts each.
+- **Metrics:** the same functions as §3 (`analyze.run_metrics`; Definitions §2). Holm is not applied (outside the
+  pre-registered family).
+
+### Calibration (`calibration.py`)
+
+| Run | Coverage [q10, q90] | Coverage [q25, q75] | Median sample std | Median q90 − q10 | Median sample range (bins) | p99 range (bins) | Rows with an extreme-bin sample |
+|---|---|---|---|---|---|---|---|
+| A, top_k 50 (main) | 0.1455 | 0.0856 | 0.00187 | 0.00473 | 70.0 | 225 | 0.29% |
+| A, top_k off | 0.7219 | 0.4475 | 0.01559 | 0.03414 | 698.2 | 2277 | 0.64% |
+| B, top_k 50 (main) | 0.1352 | 0.0797 | 0.00186 | 0.00466 | 69.0 | 115 | 0.003% |
+| B, top_k off | 0.7273 | 0.4595 | 0.01528 | 0.03482 | 673.2 | 2060 | 0.31% |
+
+Nominal coverage: 0.80 for [q10, q90] and 0.50 for [q25, q75]. Realised target std: 0.0209.
+
+### Point and spread metrics
+
+| Run | Stat | D | D_ts | Ties | Mean IC [95% CI] | p (one-sided) | Pooled Pearson | S | Spread IC [95% CI] |
+|---|---|---|---|---|---|---|---|---|---|
+| A, top_k 50 | mean | 0.0650 | 0.0537 | 0.0021 | 0.0227 [0.0151, 0.0290] | 0.0000 | 0.0221 | 0.1161 | 0.1937 [0.1841, 0.2018] |
+| A, top_k 50 | median | 0.0697 | 0.0535 | 0.0106 | 0.0202 [0.0138, 0.0257] | 0.0000 | 0.0187 | 0.1161 | 0.1937 [0.1841, 0.2018] |
+| A, top_k off | mean | 0.2708 | 0.2289 | 0.0021 | 0.0038 [−0.0003, 0.0071] | 0.0370 | 0.0046 | 0.9654 | 0.1986 [0.1884, 0.2085] |
+| A, top_k off | median | 0.2547 | 0.2169 | 0.0042 | 0.0046 [−0.0003, 0.0085] | 0.0355 | 0.0065 | 0.9654 | 0.1986 [0.1884, 0.2085] |
+| B, top_k 50 | mean | 0.1054 | 0.0741 | 0.0021 | 0.0074 [−0.0003, 0.0138] | 0.0345 | −0.0079 | 0.1151 | 0.2026 [0.1935, 0.2109] |
+| B, top_k 50 | median | 0.1127 | 0.0806 | 0.0084 | 0.0068 [−0.0008, 0.0127] | 0.0445 | −0.0076 | 0.1151 | 0.2026 [0.1935, 0.2109] |
+| B, top_k off | mean | 0.2636 | 0.2192 | 0.0021 | 0.0025 [−0.0015, 0.0062] | 0.1270 | −0.0048 | 0.9462 | 0.2036 [0.1939, 0.2125] |
+| B, top_k off | median | 0.2674 | 0.2227 | 0.0042 | 0.0024 [−0.0025, 0.0065] | 0.1875 | −0.0017 | 0.9462 | 0.2036 [0.1939, 0.2125] |
+
+Point collapse and spread collapse (rules in §2): False for all four top_k-off rows.
+
+### IC by calendar year, top_k off (mean IC [95% CI])
+
+| Run | Stat | 2024 | 2025 | 2026 |
+|---|---|---|---|---|
+| A | mean | 0.0086 [0.0024, 0.0132] | 0.0015 [−0.0045, 0.0082] | 0.0002 [−0.0045, 0.0061] |
+| A | median | 0.0080 [0.0016, 0.0132] | 0.0024 [−0.0029, 0.0108] | 0.0026 [−0.0049, 0.0111] |
+| B | mean | 0.0063 [−0.0007, 0.0132] | 0.0004 [−0.0037, 0.0060] | −0.0001 [−0.0068, 0.0100] |
+| B | median | 0.0046 [−0.0039, 0.0117] | 0.0015 [−0.0035, 0.0090] | 0.0001 [−0.0049, 0.0099] |
+
+### Paired daily IC differences (mean [95% CI], one-sided p = share of bootstrap means ≤ 0)
+
+| Difference | mean statistic | median statistic |
+|---|---|---|
+| A top_k off − A top_k 50 | −0.0188 [−0.0251, −0.0122], p 1.0000 | −0.0156 [−0.0207, −0.0105], p 1.0000 |
+| B top_k off − B top_k 50 | −0.0049 [−0.0106, 0.0022], p 0.9035 | −0.0044 [−0.0099, 0.0021], p 0.8960 |
+| A − B, both top_k off | 0.0013 [−0.0032, 0.0051], p 0.3135 | 0.0022 [−0.0019, 0.0064], p 0.1385 |
+
+### Provenance
+- Code: run_forecasts.py `--top-k-off`, run_topk.sh, explore_topk.py (2de0de7); calibration.py (518fc2b).
+- Command: `bash experiments/e00_collapse/run_topk.sh` (tmux session e00_topk). It runs both forecasts,
+  `calibration.py A_L512_s0_topkoff B_L512_s0_topkoff` and `explore_topk.py`.
+- Outputs: `results/exploratory_topk.json`, `results/calibration.json`;
+  `cache/e00/forecasts_{A,B}_L512_s0_topkoff.parquet`.
+- Logs: `cache/e00/logs/run_topk.log`, `*_topkoff.log`, `calibration_topk.log`, `explore_topk.log`.

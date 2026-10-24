@@ -20,4 +20,8 @@ Facts: [`experiments/e00_collapse/results/RESULTS_FACTS.md`](../experiments/e00_
 - **Spread collapse:** none (S: A 0.116, B 0.115, C 0.884).
 - **Exploratory (not pre-registered):** paired A−B IC difference, raw-input baselines, correlation with −r_t,
   calibration, and the top_k sensitivity check are in the facts file, §4.
+- **Exploratory top_k sensitivity (A, B; L512 s0; top_k off):**
+  - 80% interval coverage 0.722 / 0.727.
+  - IC A 0.0038 [−0.0003, 0.0071], B 0.0025 [−0.0015, 0.0062].
+  - A−B 0.0013 [−0.0032, 0.0051].
 - **Provenance:** forecasts from run_forecasts.py @ 8fcf044 via run_all.sh @ 8a12738; analysis analyze.py @ 8a12738.

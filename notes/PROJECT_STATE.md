@@ -61,8 +61,12 @@ generic Chronos/Toto hidden states with equity crash regimes. It is the nearest 
   - Mean daily IC: A 0.023 [0.015, 0.029] (Holm-significant); B 0.007 [−0.000, 0.014] (not significant);
     C ≈ 0.
   - H2 falsified.
-  - Exploratory checks (paired IC differences, factor baselines, calibration, top_k sensitivity) are in the facts
-    file §4.
+  - Exploratory checks (paired IC differences, factor baselines, calibration) are in the facts file §4.
+  - **Exploratory top_k sensitivity** (A and B, L512 s0, top_k off instead of the default 50):
+    - 80% interval coverage 0.72–0.73 (default 0.14).
+    - A IC 0.0038 [−0.0003, 0.0071]; B IC 0.0025 [−0.0015, 0.0062].
+    - A−B 0.0013 [−0.0032, 0.0051].
+    - See the facts file, last section.
 - Chase's interpretation: pending (`RESULTS_CHASE.md`).
 
 ## Changes from the original plan
