@@ -84,3 +84,25 @@ Result:
   "inconclusive (tokenizer resolution)" rule applies).
 - Bench (batch 32): 165 series/s at L=512, 333 at L=252; all 9 runs est. 238.6 min.
 Next: Chase approves -> full forecast runs.
+
+## 2026-10-23 — e00 step 5: full forecast runs and pre-registered analysis
+Ran: `run_all.sh` in tmux session e00 (16:44–20:44, about 4.0 h; 9/9 runs exit 0, full daily evaluation).
+Then `analyze.py`, then `explore.py` (exploratory, written after seeing the results).
+Result (details and provenance in findings.md F1):
+- **Verdicts:** no arm collapsed, at either context or seed. Stop condition: "neither A nor B collapsed -> report and
+  wait".
+- **Arm A (FinText):** IC 0.023 [0.015, 0.029], D 0.065, Holm-significant. Every year 2024/25/26 is about 0.02 with
+  a CI above 0.
+- **Arm B (generic, returns):** IC 0.007 [-0.000, 0.014], D 0.105. Not significant after Holm.
+- **Arm C (generic, levels):** IC -0.000 [-0.005, 0.005], D 0.30.
+- B and C escape the collapse rule through dispersion, not information. The pre-registered rule was built for
+  "flat AND uninformative" and has no category for "dispersed but uninformative". Reported as-is, not reclassified.
+- **H1:** supported in its "weaker" form (A > B, paired diff 0.015 [0.008, 0.023]).
+- **H2:** falsified (C is more dispersed, with no IC).
+- **Exploratory baselines:**
+  - A is about level with 12-1 momentum (0.027) and above 1-day reversal (0.015).
+  - Trailing 21-day vol (0.220) beats all model spreads (0.19–0.20) at predicting |r|.
+  - Forecasts correlate with -r_t at +0.21 (A) vs -0.21 (B): FinText reverses, generic extrapolates.
+- **Surprise:** A and B 80% intervals cover only about 14%. Candidate cause: the top_k=50 sampling default.
+  Unconfirmed.
+Next: Chase reviews. Open choices: whether e01 proceeds on the IC gap; whether to rerun A/B with top_k disabled.

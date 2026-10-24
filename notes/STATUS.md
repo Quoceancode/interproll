@@ -2,33 +2,34 @@
 
 _Overwrite this file at the end of each session. Keep it under one screen._
 
-**Last updated:** 2026-10-23
+**Last updated:** 2026-10-23 (evening)
 
 ## Where things stand
-- WSL2 + venv `~/venvs/tsfm-interp` set up; 54GB RAM to WSL confirmed.
-- torch 2.11.0+cu128 with CUDA working on the RTX 5070 Ti; nnsight 0.8.1, chronos-forecasting 2.3.2 installed.
-- Dependencies audited and pinned in `requirements.txt` (certifi 2026.10.19, dateutil 2.9.0.post0; see decisions.md).
-- Ask before installing or upgrading anything else.
-- Novelty re-check done 2026-10-23 (see literature.md "Search log"): gap still open; nearest prior work is
-  time2time (2509.05801). Claim narrowly.
-
-- e00 step 3 (data) done: panel of 474 stocks x 668 eval days (2024-01-02..2026-08-31). Models not downloaded.
-
-- e00 runs on 474 stocks (decided). MRNA +177% day verified real (decisions.md).
+- Environment: WSL2 + venv `~/venvs/tsfm-interp`; torch 2.11.0+cu128 on the RTX 5070 Ti; dependencies pinned
+  (requirements.txt). Permission guard live (`.claude/`). Ask before installing or upgrading anything.
+- Novelty re-check done 2026-10-23; nearest prior work is time2time (2509.05801). Claim narrowly.
+- **e00 complete** (findings.md F1; commit 538df76):
+  - No arm collapsed. Stop condition not triggered.
+  - **FinText (A):** IC about 0.02, significant in every year, seed and context.
+  - **Generic on returns (B):** IC 0.007, not significant. Dispersed but uninformative.
+  - **Generic on levels (C):** IC about 0. H2 falsified.
+  - **Exploratory:** A is about level with 12-1 momentum. FinText reverses the last return; generic extrapolates it.
+  - **Exploratory:** model spreads are no better than trailing volatility.
+- Unexplained: A/B predictive intervals far too narrow (80% interval covers about 14%). Candidate: top_k=50.
 
 ## Blockers
-- Chase reviewing the wrong-company screen: `experiments/e00_collapse/results/move_screen.csv` (6 moves > 40%,
-  0 level jumps > 5x, 4 late first dates). Panel unchanged until reviewed.
+- **Waiting for Chase's review of e00** (per the "neither collapsed -> report and wait" rule).
+
+## Decisions for Chase
+1. Proceed to e01 on the A−B IC gap (0.015 [0.008, 0.023])? The rule has no "dispersed but uninformative" class.
+2. Rerun A/B with top_k disabled to test the narrow-interval explanation? About 2 GPU-hours for L512 s0.
+3. Should e01 target the reversal-vs-extrapolation difference (forecast vs -r_t: +0.21 vs -0.21) first?
 
 ## Tasks before e01
 - Research the 20 Yahoo 404s and 5 truncated tickers (AVB, EA, EQR, QRVO, WBD) with cited sources; map confirmed
   same-security renames in `experiments/e00_collapse/ticker_map.csv` (candidates, unverified: CDAY->DAY,
   FLT->CPAY, PEAK->DOC; BK, MMC, FI, CTRA unexplained). See data/raw/e00/missing_tickers.csv.
 
-## Next steps
-1. e00: measure forecast variance / collapse for the generic Chronos and FinText Chronos-Small on the same
-   post-training-cutoff returns. **If both collapse, stop and report** before any interpretability work.
-   Spec (decisions.md): FinText Chronos_Small_2023_US vs amazon/chronos-t5-small; S&P 500 as of 2023-12-31;
-   returns from 2024-01-01; decimals clipped to [-1, 1] via `src/returns.py`; context 512 (robust: 252);
-   metrics = sample mean, median, spread. Open: pick the dated constituents source.
-2. e01: load a generic Chronos and a FinText Chronos with nnsight; cache encoder activations on ~50 tickers of daily returns.
+## Next steps (after review)
+1. e01: load both models with nnsight; cache encoder activations on e00 contexts (subset of tickers/days).
+2. Probes for reversal / momentum / volatility with all three baselines (raw inputs, random init, generic).
