@@ -6,6 +6,18 @@ _Ranked. Each must be testable with what the model actually sees._
 First mechanistic comparison of finance-pretrained vs generic TSFMs, mapping features to finance factors;
 builds on time2time (2509.05801).
 
+## e01 — first target (recorded 2026-10-23; ON HOLD pending Chase's foundations work)
+**Target:** A's reversal vs B's extrapolation. In e00, A's forecasts correlate +0.21 with −r_t and B's −0.21
+(RESULTS_FACTS.md §4.3). Which internal computation sets the sign of each model's reaction to the last return?
+- **Pre-step:**
+  - Regress A's forecasts (daily cross-sectional) on short-term reversal (−r_t; also 5-day) and 12-1 momentum.
+  - Test whether the residual still predicts r_{t+1}: mean daily IC of the residual with a moving-block bootstrap
+    CI (as in e00).
+  - Pre-register the hypothesis, the falsifier and numeric thresholds before running.
+- **Method note:** probing for yesterday's return is trivial, since r_t is in the input. e01 must rely on
+  interventions (ablation and activation patching between A and B, e.g. at the last context positions), not only
+  on probes. Probes still need the three CLAUDE.md baselines.
+
 ## Core
 1. Which features exist in the finance-pretrained model but not the generic one (SAE dictionary comparison)?
 2. Are momentum, short-term reversal, volatility, and drawdown linearly decodable from activations, beyond what
