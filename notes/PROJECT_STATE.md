@@ -66,6 +66,10 @@ generic Chronos/Toto hidden states with equity crash regimes. It is the nearest 
     - 80% interval coverage 0.72–0.73 (default 0.14).
     - A IC 0.0038 [−0.0003, 0.0071]; B IC 0.0025 [−0.0015, 0.0062].
     - A−B 0.0013 [−0.0032, 0.0051].
+    - See the facts file.
+  - **Exploratory exact-distribution forecasts** (A and B, L512, no sampling):
+    - A IC: full mean 0.017, full median 0.024, mode 0.005.
+    - A−B: full median 0.017 [0.006, 0.027]; full mean 0.012 [−0.001, 0.023].
     - See the facts file, last section.
 - Chase's interpretation: pending (`RESULTS_CHASE.md`).
 

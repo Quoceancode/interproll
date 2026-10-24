@@ -287,3 +287,67 @@ Point collapse and spread collapse (rules in §2): False for all four top_k-off 
 - Outputs: `results/exploratory_topk.json`, `results/calibration.json`;
   `cache/e00/forecasts_{A,B}_L512_s0_topkoff.parquet`.
 - Logs: `cache/e00/logs/run_topk.log`, `*_topkoff.log`, `calibration_topk.log`, `explore_topk.log`.
+
+## Exploratory: exact-distribution forecasts (added 2026-10-23; not pre-registered)
+
+### Method
+- **Runs:** arms A and B, L = 512, the same 315,558 tasks as the main runs. One forward pass per context; no
+  sampling, so no seed, temperature or top_k.
+- **Distribution:**
+  - Logits of the first decoder step over 4,096 tokens (decoder start token = T5 `decoder_start_token_id`).
+  - Value bins = token ids 2..4095; the special tokens pad (id 0) and EOS (id 1) are excluded.
+  - Token id t decodes to centers[clamp(t − 3, 0, 4092)] × scale, with scale = mean |context|
+    (`MeanScaleUniformBins.output_transform`).
+- **Variants:**
+  - *full*: softmax over all value bins.
+  - *top50*: softmax over the 50 value bins with the highest logits (others set to −∞).
+  - *mean* = Σ p·value; *median* = smallest value with CDF ≥ 0.5; *mode* = value of the arg-max bin.
+- **IC and paired differences:** as in §2 (moving-block bootstrap, block 20, 2,000 resamples, seed 0). No
+  multiplicity correction.
+
+### Correctness check (`exact_forecasts.py --check`, `results/exact_check.json`)
+- **Sample:** 64 contexts (evenly spaced task indices), 4,000 sampled forecasts each via `pipe.predict`
+  (8 × 500), for top_k = 4096 and top_k = 50.
+- **Comparison target:** the "sampler-equivalent" exact mean. It is a softmax over all tokens except EOS (which
+  generation suppresses via min_new_tokens), with pad decoded to the lowest bin as the sampler decodes it.
+  For top_k = 50 it keeps the 50 highest of those logits.
+- z = (sample mean − exact mean) / (sample std / √4000).
+
+| Arm, top_k | max \|z\| | share \|z\| > 2.58 | mean z | median MC SE | median \|exact excl. special − sampler-equivalent\| |
+|---|---|---|---|---|---|
+| A, off | 2.68 | 0.031 | −0.150 | 0.00028 | 6.2e-07 |
+| A, 50 | 2.36 | 0.000 | +0.162 | 0.000032 | 0 |
+| B, off | 3.17 | 0.031 | −0.062 | 0.00027 | 7.7e-06 |
+| B, 50 | 1.79 | 0.000 | −0.082 | 0.000032 | 0 |
+
+### Probability mass on special tokens (raw softmax over 4,096 tokens)
+
+| | median | p99 | max |
+|---|---|---|---|
+| A pad | 3.4e-06 | 1.8e-05 | 8.4e-05 |
+| A EOS | 1.7e-06 | 5.7e-06 | 1.5e-04 |
+| B pad | 4.3e-05 | 1.9e-04 | 1.1e-03 |
+| B EOS | 3.4e-05 | 9.8e-05 | 4.7e-04 |
+
+### Mean daily IC (n = 315,558 forecasts; 0 undefined days)
+
+| Variant | A IC [95% CI], p | B IC [95% CI], p | A − B paired [95% CI], p |
+|---|---|---|---|
+| full mean | 0.0167 [0.0097, 0.0228], 0.0000 | 0.0049 [−0.0038, 0.0136], 0.141 | 0.0117 [−0.0010, 0.0227], 0.0355 |
+| full median | 0.0241 [0.0159, 0.0313], 0.0000 | 0.0072 [−0.0015, 0.0154], 0.055 | 0.0169 [0.0060, 0.0266], 0.001 |
+| full mode | 0.0053 [−0.0005, 0.0118], 0.0365 | 0.0015 [−0.0051, 0.0078], 0.332 | 0.0039 [−0.0038, 0.0119], 0.159 |
+| top50 mean | 0.0254 [0.0168, 0.0330], 0.0000 | 0.0080 [0.0001, 0.0142], 0.0235 | 0.0175 [0.0097, 0.0254], 0.0000 |
+| top50 median | 0.0240 [0.0158, 0.0313], 0.0000 | 0.0072 [−0.0004, 0.0134], 0.0335 | 0.0168 [0.0096, 0.0246], 0.0000 |
+| top50 mode | 0.0053 [−0.0005, 0.0118], 0.0365 | 0.0015 [−0.0051, 0.0078], 0.332 | 0.0039 [−0.0038, 0.0119], 0.159 |
+
+- p = one-sided share of bootstrap means ≤ 0.
+- Full mode and top50 mode are identical forecasts (the arg-max bin is always among the top 50).
+
+### Provenance
+- Code: `exact_forecasts.py`, `run_exact.sh` (1d46def).
+- Commands:
+  - `$PY experiments/e00_collapse/exact_forecasts.py --check`
+  - `bash experiments/e00_collapse/run_exact.sh` (tmux session e00_exact, 2026-10-23 22:46:56 – 23:03:13 −07:00;
+    all steps exit 0). It runs `--arm A`, `--arm B` and `--analyze`.
+- Outputs: `results/exploratory_exact.json`, `results/exact_check.json`; `cache/e00/exact_{A,B}_L512.parquet`.
+- Logs: `cache/e00/logs/exact_check.log`, `run_exact.log`, `exact_A.log`, `exact_B.log`, `exact_analyze.log`.

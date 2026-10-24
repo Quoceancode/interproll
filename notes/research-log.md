@@ -124,3 +124,17 @@ Next: Chase reviews. Open choices: whether e01 proceeds on the IC gap; whether t
   - A top_k off − A default: −0.0188 [−0.0251, −0.0122].
   - Facts: e00 RESULTS_FACTS.md, last section.
 - **Next:** Chase's foundations work. Open choice: an exact-logit forecast check before e01.
+
+## 2026-10-23 — e00 exact-distribution forecasts (exploratory, requested by Chase)
+- **Question:** is the top_k-off IC drop sampling noise, or does truncation create the signal?
+- **Ran:**
+  - `exact_forecasts.py --check`: exact means vs 4,000-sample means on 64 contexts; z-scores consistent with
+    noise; max |z| 3.17.
+  - `bash experiments/e00_collapse/run_exact.sh` (1d46def): A and B, L512, first-step distribution, no sampling.
+- **Result (mean daily IC):**
+  - A: full mean 0.0167 [0.0097, 0.0228]; full median 0.0241; top50 mean 0.0254; mode 0.0053 [−0.0005, 0.0118].
+  - B: 0.0015–0.0080.
+  - A−B: full mean 0.0117 [−0.0010, 0.0227]; full median 0.0169 [0.0060, 0.0266];
+    top50 mean 0.0175 [0.0097, 0.0254].
+  - Facts: e00 RESULTS_FACTS.md, last section.
+- **Next:** unchanged (Chase's foundations; e01 on hold).

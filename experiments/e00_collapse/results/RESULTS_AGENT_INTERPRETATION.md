@@ -187,3 +187,46 @@ expectation over bin centres × scale.
   Report IC for the exact mean, median and mode, and the A−B paired difference.
 - Cost: about 1 GPU-hour or less (one forward pass instead of 20 samples).
 - This also gives e01 a deterministic point forecast to intervene on, which interventions need anyway.
+
+---
+
+## Appended 2026-10-23 (later) — exact-distribution forecasts (AI-WRITTEN)
+Facts: `RESULTS_FACTS.md`, "Exploratory: exact-distribution forecasts". Earlier sections are left as written.
+
+### Reading
+1. **The top_k-off collapse of A's IC was mainly a 20-sample Monte Carlo artefact — strong.**
+   - Without sampling noise, A's IC is 0.017 (full mean) to 0.024 (full median). Under top_k-off sampling it was
+     0.004.
+   - The sampling check confirms the exact computation matches the sampler (z-scores consistent with noise; special
+     tokens negligible). So the gap between 0.004 and 0.017–0.024 is sampling noise in a 20-sample average, as
+     estimated in the previous section.
+2. **FinText's edge over generic Chronos survives without any decoding choices — moderate to strong.**
+   - A−B is 0.017 [0.006, 0.027] for the exact full median, and 0.017–0.018 for top50 mean and median.
+   - For the exact full mean it is 0.012 with a CI just touching 0 [−0.001, 0.023].
+   - Moderate rather than strong: one context, one seed-free run, post hoc, and the full-mean variant is borderline.
+3. **The signal sits in the centre of the distribution, not its tails or its peak — moderate.**
+   - **Median ≈ top50 mean > full mean:** the far tails add noise. They contribute to the full mean but not the
+     median, and A's full-mean IC is lower (0.017 vs 0.024).
+   - **The mode carries almost nothing** (A 0.005, CI crossing 0). Bins are fine (about 0.009 percentage points of
+     return), so this is not resolution. A plausible reason (speculative): the predicted distributions span
+     hundreds of bins with a flat or jagged top, so the arg-max lands on local spikes (e.g. near 0) rather than
+     tracking where the bulk of the mass shifts. Untested.
+   - So the skill is a shift of the bulk of the predictive distribution, best captured by its median. This
+     replaces explanation 2 of the previous section ("truncation creates the signal"): truncation helped only
+     because it suppresses the noisy tails, and the full median does the same without truncation.
+4. **B is consistently weak:** IC 0.005–0.008 across variants, about the same as in the main runs. The exact
+   computation does not reveal hidden skill in generic Chronos.
+
+### Revised strength of earlier claims
+- §1.1 and §1.2 (A has skill; the A−B gap is real): **back to strong for the median-based forecast** (default
+  sampling, exact median, exact top50). Moderate for the exact full mean.
+- §1.4 (reversal vs extrapolation): still **speculative**. It should be re-measured on the exact median forecast
+  before e01 builds on it.
+- §1.7: the narrow intervals were top_k (confirmed). The point forecast's sensitivity to top_k was sampling noise
+  plus tail dilution, not truncation-created skill.
+
+### Recommended for e01 (Chase decides)
+- Use the **exact full median** (or the exact first-step distribution itself) as the forecast that interventions
+  act on. It is deterministic, needs no decoding choices, and carries the A−B gap.
+- Re-run the e01 pre-step (factor regression, residual IC) and the corr(forecast, −r_t) contrast on the exact
+  median.

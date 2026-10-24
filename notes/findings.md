@@ -24,4 +24,8 @@ Facts: [`experiments/e00_collapse/results/RESULTS_FACTS.md`](../experiments/e00_
   - 80% interval coverage 0.722 / 0.727.
   - IC A 0.0038 [−0.0003, 0.0071], B 0.0025 [−0.0015, 0.0062].
   - A−B 0.0013 [−0.0032, 0.0051].
+- **Exploratory exact-distribution forecasts (A, B; L512; no sampling):**
+  - A IC: full mean 0.0167 [0.0097, 0.0228]; full median 0.0241 [0.0159, 0.0313]; mode 0.0053 [−0.0005, 0.0118].
+  - A−B: full mean 0.0117 [−0.0010, 0.0227]; full median 0.0169 [0.0060, 0.0266];
+    top50 mean 0.0175 [0.0097, 0.0254].
 - **Provenance:** forecasts from run_forecasts.py @ 8fcf044 via run_all.sh @ 8a12738; analysis analyze.py @ 8a12738.
