@@ -1,0 +1,6 @@
+{
+  "script": "analyze.py",
+  "context": 512,
+  "seed": 0,
+  "window_days": 60
+}

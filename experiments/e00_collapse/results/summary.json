@@ -1,0 +1,64 @@
+{
+  "verdicts": {
+    "A": {
+      "verdict_L512": "not collapsed",
+      "collapsed_L252": false,
+      "L512_vs_L252_agree": true
+    },
+    "B": {
+      "verdict_L512": "not collapsed",
+      "collapsed_L252": false,
+      "L512_vs_L252_agree": true
+    },
+    "C": {
+      "verdict_L512": "not collapsed",
+      "collapsed_L252": false,
+      "L512_vs_L252_agree": true
+    }
+  },
+  "stop_condition": "Neither A nor B collapsed -> report and wait for Chase.",
+  "H2_C_vs_B": {
+    "mean": {
+      "D_B": 0.10542850196361542,
+      "D_C": 0.29854583740234375,
+      "IC_B": [
+        0.007412967750410991,
+        -0.00031099349227755625,
+        0.013751007060495748
+      ],
+      "IC_C": [
+        -0.0002472769115853048,
+        -0.005150414448857681,
+        0.005077781943504531
+      ],
+      "C_higher_D": true,
+      "C_higher_IC": false,
+      "IC_CIs_overlap": true
+    },
+    "median": {
+      "D_B": 0.11266341805458069,
+      "D_C": 0.2967132329940796,
+      "IC_B": [
+        0.006791876217796191,
+        -0.0008075660860790974,
+        0.01269865292896073
+      ],
+      "IC_C": [
+        0.000569319041273932,
+        -0.004524203223116737,
+        0.005357464499249081
+      ],
+      "C_higher_D": true,
+      "C_higher_IC": false,
+      "IC_CIs_overlap": true
+    }
+  },
+  "thresholds": {
+    "D": 0.05,
+    "ties": 0.5,
+    "S": 0.1,
+    "block": 20,
+    "n_boot": 2000
+  },
+  "ic_context_note": "daily cross-sectional rank ICs of ~0.01-0.03 are typically economically meaningful"
+}
